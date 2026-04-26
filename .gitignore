@@ -29,7 +29,7 @@ web_modules
 .temp
 .eslintcache
 .stylelintcache
-tsconfig.tsbuildinfo
+*.tsbuildinfo
 
 # environment
 *.local
