@@ -1,0 +1,46 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Shanghai
+    open-pull-requests-limit: 5
+    groups:
+      react:
+        patterns:
+          - react
+          - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+      radix:
+        patterns:
+          - "@radix-ui/*"
+          - radix-ui
+      dev-tooling:
+        patterns:
+          - eslint
+          - "@antfu/eslint-config"
+          - "@tomjs/*"
+          - typescript
+          - vite
+          - vitest
+          - "@vitejs/*"
+          - "@vitest/*"
+          - "@playwright/*"
+          - playwright
+          - "@testing-library/*"
+    labels:
+      - dependencies
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+      - github-actions
