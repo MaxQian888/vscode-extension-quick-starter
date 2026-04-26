@@ -2,7 +2,7 @@ import { window } from 'vscode';
 
 import { logger } from '../logger';
 
-import type { WebviewToExtensionMessage } from '../../shared/messages';
+import type { WebviewToExtensionMessage } from '@shared/messages';
 import type { ExtensionContext } from 'vscode';
 
 type Handler<T extends WebviewToExtensionMessage['type']> = (

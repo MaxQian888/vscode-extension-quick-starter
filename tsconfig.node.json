@@ -1,7 +1,7 @@
 {
   "extends": "@tomjs/tsconfig/node.json",
   "compilerOptions": {
-    "baseUrl": "..",
+    "baseUrl": ".",
     "paths": {
       "@shared/*": ["./shared/*"]
     }
