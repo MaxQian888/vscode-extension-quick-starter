@@ -1,5 +1,5 @@
 import { MessageSquare, Settings, Zap } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,13 @@ function App() {
   useVscodeMessage('hello', (msg) => {
     setLastFromExtension(msg.data);
   });
+
+  // Signal readiness AFTER the message listener is registered (the
+  // useVscodeMessage useEffect above runs before this one in commit order),
+  // so the extension's hello reply cannot race past us.
+  useEffect(() => {
+    api.postMessage({ type: 'webview/ready' });
+  }, [api]);
 
   const onSetState = () => {
     api.setState({ state });

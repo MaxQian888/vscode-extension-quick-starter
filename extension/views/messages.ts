@@ -22,7 +22,11 @@ const handlers: HandlerMap = {
     logger[msg.level](`[webview] ${msg.message}`);
   },
   'webview/error': (msg) => {
-    logger.error(`[webview render] ${msg.error.name}: ${msg.error.message}`, msg.error);
+    // Inline the stack into the message string. The logger's `error?` arg
+    // only formats `instanceof Error` and would silently drop a plain
+    // {name,message,stack} payload like the one webview/error carries.
+    const stack = msg.error.stack ? `\n${msg.error.stack}` : '';
+    logger.error(`[webview render] ${msg.error.name}: ${msg.error.message}${stack}`);
     window.showErrorMessage(`Webview error: ${msg.error.message}`);
   },
   'webview/ready': () => {

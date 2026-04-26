@@ -43,7 +43,7 @@ ReactDOM.createRoot(root).render(
   </StrictMode>,
 );
 
-// Signal readiness after the React tree mounts.
-queueMicrotask(() => {
-  api.postMessage({ type: 'webview/ready' });
-});
+// Note: the `webview/ready` handshake is dispatched from inside <App/>'s
+// useEffect, AFTER `useVscodeMessage('hello', ...)` has registered its
+// window listener — otherwise the extension's hello reply could arrive
+// before the listener exists.
