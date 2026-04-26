@@ -7,6 +7,5 @@
       "@shared/*": ["./shared/*"]
     }
   },
-  "references": [{ "path": "./tsconfig.node.json" }],
   "include": ["webview", "shared"]
 }
