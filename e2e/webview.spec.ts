@@ -19,7 +19,7 @@ test.describe('Webview UI', () => {
 
   test('should display message card', async ({ page }) => {
     await expect(page.getByText('Message', { exact: true })).toBeVisible();
-    await expect(page.getByText('Send a message to the VSCode extension')).toBeVisible();
+    await expect(page.getByText('Send a typed message to the VSCode extension')).toBeVisible();
   });
 
   test('should display state management card', async ({ page }) => {

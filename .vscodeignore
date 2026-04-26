@@ -1,11 +1,23 @@
-# Source files
+# Source files (will be built into dist/)
 webview/
 extension/
+shared/
 src/
+index.html
+
+# Tooling and tests
+scripts/
+e2e/
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
 
 # Development files
 .vscode/
 .github/
+.changeset/
 node_modules/
 
 # Config files
@@ -13,17 +25,17 @@ node_modules/
 *.config.mjs
 tsconfig*.json
 components.json
+playwright.config.ts
+vite.config.ts
+vitest.config.ts
 eslint.config.mjs
 lint-staged.config.mjs
 commitlint.config.mjs
 simple-git-hooks.mjs
-stylelint.config.mjs
 
-# Build tools
-vite.config.ts
-
-# Documentation
+# Documentation (keep README.md only)
 *.md
+docs/
 !README.md
 
 # Package manager
@@ -34,15 +46,14 @@ pnpm-workspace.yaml
 .editorconfig
 .gitattributes
 .gitignore
+.nvmrc
 
-# Test files
-__tests__/
-*.test.ts
-*.test.tsx
-*.spec.ts
-*.spec.tsx
-vitest.config.ts
+# Reports / build artifacts not in dist/
 coverage/
+playwright-report/
+test-results/
+.template-init.json
+*.tsbuildinfo
 
 # Misc
 .env*
