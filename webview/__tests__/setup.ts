@@ -6,14 +6,14 @@ afterEach(() => {
   cleanup();
 });
 
-// Mock VSCode API
 const mockVsCodeApi = {
   postMessage: vi.fn(),
   getState: vi.fn(() => undefined),
-  setState: vi.fn(),
+  setState: vi.fn((state: unknown) => state),
 };
 
-(globalThis as any).acquireVsCodeApi = vi.fn(() => mockVsCodeApi);
+(globalThis as unknown as { acquireVsCodeApi: () => unknown }).acquireVsCodeApi = vi.fn(
+  () => mockVsCodeApi,
+);
 
-// Export for use in tests
 export { mockVsCodeApi };
