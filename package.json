@@ -96,6 +96,7 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:status": "changeset status",
+    "init:template": "node scripts/init-template.mjs",
     "release:publish": "pnpm build && pnpm package"
   },
   "dependencies": {
