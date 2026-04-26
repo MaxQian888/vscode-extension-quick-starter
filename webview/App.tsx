@@ -7,27 +7,37 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useVscodeApi } from '@/hooks/useVscodeApi';
+import { useVscodeMessage } from '@/hooks/useVscodeMessage';
 
-import { vscode } from './utils/vscode';
 import './index.css';
 
+interface PersistedState {
+  state: string;
+}
+
 function App() {
+  const api = useVscodeApi<PersistedState>();
   const [message, setMessage] = useState('');
   const [state, setState] = useState('');
+  const [lastFromExtension, setLastFromExtension] = useState('(awaiting ready handshake)');
+
+  useVscodeMessage('hello', (msg) => {
+    setLastFromExtension(msg.data);
+  });
 
   const onSetState = () => {
-    vscode.setState(state);
+    api.setState({ state });
   };
   const onGetState = () => {
-    setState((vscode.getState() || '') as string);
+    setState(api.getState()?.state ?? '');
   };
-
-  function onPostMessage() {
-    vscode.postMessage({
+  const onPostMessage = () => {
+    api.postMessage({
       type: 'hello',
-      data: `💬: ${message || 'Empty'}`,
+      data: message || 'Empty',
     });
-  }
+  };
 
   return (
     <main className="flex min-h-screen flex-col gap-6 p-6">
@@ -42,6 +52,12 @@ function App() {
 
       <Separator />
 
+      <p className="text-sm text-muted-foreground">
+        Last from extension:
+        {' '}
+        <span data-testid="extension-payload" className="font-mono">{lastFromExtension}</span>
+      </p>
+
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
@@ -49,7 +65,7 @@ function App() {
               <MessageSquare className="size-5" />
               Message
             </CardTitle>
-            <CardDescription>Send a message to the VSCode extension</CardDescription>
+            <CardDescription>Send a typed message to the VSCode extension</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
