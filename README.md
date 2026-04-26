@@ -90,20 +90,20 @@ See [docs/publishing.md](docs/publishing.md). Note: `package.json` ships with `p
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Vite dev server with HMR |
-| `pnpm build` | Production build |
-| `pnpm typecheck` | `tsc --noEmit` for both projects |
-| `pnpm lint` | ESLint (`@antfu` + `@tomjs` presets) |
-| `pnpm test` | Vitest unit suite |
-| `pnpm test:coverage` | Vitest with v8 coverage |
-| `pnpm test:extension` | Extension-host integration tests |
-| `pnpm test:e2e` | Playwright (dev + prod-preview projects) |
-| `pnpm test:all` | All three test layers |
-| `pnpm package` | Produce `.vsix` |
-| `pnpm changeset` | Add a changeset entry for the next release |
-| `pnpm init:template` | One-shot template adoption (run once after cloning) |
+| Command               | Description                                         |
+| --------------------- | --------------------------------------------------- |
+| `pnpm dev`            | Vite dev server with HMR                            |
+| `pnpm build`          | Production build                                    |
+| `pnpm typecheck`      | `tsc --noEmit` for both projects                    |
+| `pnpm lint`           | ESLint (`@antfu` + `@tomjs` presets)                |
+| `pnpm test`           | Vitest unit suite                                   |
+| `pnpm test:coverage`  | Vitest with v8 coverage                             |
+| `pnpm test:extension` | Extension-host integration tests                    |
+| `pnpm test:e2e`       | Playwright (dev + prod-preview projects)            |
+| `pnpm test:all`       | All three test layers                               |
+| `pnpm package`        | Produce `.vsix`                                     |
+| `pnpm changeset`      | Add a changeset entry for the next release          |
+| `pnpm init:template`  | One-shot template adoption (run once after cloning) |
 
 ## Testing
 

@@ -20,7 +20,8 @@ export function register(context: ExtensionContext): void {
     commands.registerCommand(COMMAND_ID, async () => {
       try {
         const choice = await window.showQuickPick(['Option A', 'Option B']);
-        if (choice) window.showInformationMessage(`You picked ${choice}`);
+        if (choice)
+          window.showInformationMessage(`You picked ${choice}`);
       }
       catch (err) {
         logger.error('myFeature command failed', err);
@@ -33,14 +34,12 @@ export function register(context: ExtensionContext): void {
 
 ## 2. Register the command in `package.json`
 
-```jsonc
-"contributes": {
-  "commands": [
-    { "command": "hello-world.showHelloWorld", "title": "Hello World: Show" },
-    { "command": "my-extension.myFeature", "title": "My Extension: Do Thing" }
-  ]
-}
-```
+Add an entry under `contributes.commands`:
+
+    {
+      "command": "my-extension.myFeature",
+      "title": "My Extension: Do Thing"
+    }
 
 ## 3. Wire it from `extension/index.ts`
 
@@ -55,13 +54,9 @@ export function activate(context: ExtensionContext): void {
 
 ## 4. (If the command communicates with the webview) Add a message variant
 
-In `shared/messages.ts`, add a case to either union as appropriate:
+In `shared/messages.ts`, add a case to either union as appropriate. Append a new variant to the existing union:
 
-```ts
-export type WebviewToExtensionMessage =
-  | …existing
-  | { type: 'feature/run'; payload: { input: string } };
-```
+    | { type: 'feature/run'; payload: { input: string } };
 
 TypeScript will now require:
 
@@ -75,7 +70,8 @@ Add an integration assertion to `__tests__/extension/suite/extension.test.ts`:
 ```ts
 it('registers the myFeature command', async () => {
   const ext = vscode.extensions.getExtension(EXTENSION_ID);
-  if (ext && !ext.isActive) await ext.activate();
+  if (ext && !ext.isActive)
+    await ext.activate();
   const ids = await vscode.commands.getCommands(true);
   assert.ok(ids.includes('my-extension.myFeature'));
 });

@@ -16,11 +16,6 @@
   "bugs": {
     "url": "https://github.com/AstroAir/vscode-extension-quick-starter/issues"
   },
-  "main": "dist/extension/index.js",
-  "icon": "assets/icon.png",
-  "categories": [
-    "Other"
-  ],
   "keywords": [
     "react",
     "shadcn",
@@ -29,6 +24,11 @@
     "starter",
     "template"
   ],
+  "categories": [
+    "Other"
+  ],
+  "main": "dist/extension/index.js",
+  "icon": "assets/icon.png",
   "galleryBanner": {
     "color": "#1e1e1e",
     "theme": "dark"
