@@ -18,11 +18,26 @@
   },
   "main": "dist/extension/index.js",
   "icon": "assets/icon.png",
-  "categories": ["Other"],
-  "keywords": ["react", "shadcn", "tailwind", "webview", "starter", "template"],
-  "galleryBanner": { "color": "#1e1e1e", "theme": "dark" },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "react",
+    "shadcn",
+    "tailwind",
+    "webview",
+    "starter",
+    "template"
+  ],
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
   "qna": "marketplace",
-  "extensionKind": ["ui", "workspace"],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": "limited",
@@ -30,7 +45,13 @@
     },
     "virtualWorkspaces": true
   },
-  "files": ["dist", "assets/icon.png", "LICENSE", "README.md", "CHANGELOG.md"],
+  "files": [
+    "dist",
+    "assets/icon.png",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "engines": {
     "node": ">=20",
     "vscode": "^1.93.0"
@@ -71,7 +92,11 @@
     "publish:pre": "pnpm run build:prod && vsce publish --no-dependencies --pre-release",
     "vscode:prepublish": "pnpm run build:prod",
     "prepare": "simple-git-hooks",
-    "release": "pnpm run test:all && pnpm run package"
+    "release": "pnpm run test:all && pnpm run package",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:status": "changeset status",
+    "release:publish": "pnpm build && pnpm package"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.8",
@@ -88,6 +113,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.7.3",
+    "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^20.5.2",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/vite": "^4.2.4",
