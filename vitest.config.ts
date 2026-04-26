@@ -13,12 +13,22 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
-      include: ['webview/**/*.{ts,tsx}'],
+      include: [
+        'webview/hooks/**/*.{ts,tsx}',
+        'webview/lib/**/*.{ts,tsx}',
+        'webview/components/ErrorBoundary.tsx',
+      ],
       exclude: [
         'webview/**/*.d.ts',
         'webview/__tests__/**',
         'webview/main.tsx',
       ],
+      thresholds: {
+        statements: 80,
+        branches: 75,
+        functions: 80,
+        lines: 80,
+      },
     },
   },
 });
