@@ -37,6 +37,7 @@
     "build:prod": "pnpm run clean && pnpm run typecheck && vite build --mode production",
     "build:analyze": "vite build --mode production --config vite.config.ts -- --analyze",
     "preview": "vite preview",
+    "preview:e2e": "vite preview --port 4173 --strictPort",
     "clean": "rimraf dist .vscode-test test-results playwright-report __tests__/out",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json",
     "lint": "eslint .",
