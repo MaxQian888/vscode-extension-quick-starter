@@ -11,6 +11,7 @@ export default defineConfig({
     '__tests__/out/**',
     '*.d.ts',
     '.github/**',
+    'docs/superpowers/**',
   ],
 
   // 全局规则
