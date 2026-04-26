@@ -1,9 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { act } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import App from '../App';
 
 import { mockVsCodeApi } from './setup';
+
+function dispatchMessage(data: unknown): void {
+  window.dispatchEvent(new MessageEvent('message', { data }));
+}
 
 describe('app', () => {
   beforeEach(() => {
@@ -15,88 +20,47 @@ describe('app', () => {
     expect(screen.getByText('VSCode Extension Starter')).toBeInTheDocument();
   });
 
-  it('renders the subtitle', () => {
+  it('shows placeholder until extension hello arrives', () => {
     render(<App />);
-    expect(screen.getByText('React + shadcn/ui + Tailwind CSS')).toBeInTheDocument();
+    expect(screen.getByTestId('extension-payload').textContent).toMatch(/awaiting ready handshake/i);
   });
 
-  it('renders message card', () => {
+  it('updates extension-payload when hello is dispatched', () => {
     render(<App />);
-    expect(screen.getByText('Message')).toBeInTheDocument();
-    expect(screen.getByText('Send a message to the VSCode extension')).toBeInTheDocument();
+    act(() => dispatchMessage({ type: 'hello', data: 'Hello World!' }));
+    expect(screen.getByTestId('extension-payload').textContent).toBe('Hello World!');
   });
 
-  it('renders state management card', () => {
+  it('ignores irrelevant messages', () => {
     render(<App />);
-    expect(screen.getByText('State Management')).toBeInTheDocument();
-    expect(screen.getByText('Persist state across webview sessions')).toBeInTheDocument();
+    act(() => dispatchMessage({ type: 'theme/changed', kind: 'dark' }));
+    expect(screen.getByTestId('extension-payload').textContent).toMatch(/awaiting ready handshake/i);
   });
 
-  it('updates message input value', () => {
+  it('sends typed hello on Send button', () => {
     render(<App />);
-    const input = screen.getByPlaceholderText('Enter message...');
-    fireEvent.change(input, { target: { value: 'Hello' } });
-    expect(input).toHaveValue('Hello');
+    fireEvent.change(screen.getByPlaceholderText('Enter message...'), { target: { value: 'Hi' } });
+    fireEvent.click(screen.getByRole('button', { name: /send message/i }));
+    expect(mockVsCodeApi.postMessage).toHaveBeenCalledWith({ type: 'hello', data: 'Hi' });
   });
 
-  it('shows message preview when message is entered', () => {
+  it('falls back to "Empty" when sending without input', () => {
     render(<App />);
-    const input = screen.getByPlaceholderText('Enter message...');
-    fireEvent.change(input, { target: { value: 'Test message' } });
-    expect(screen.getByText('Preview: Test message')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /send message/i }));
+    expect(mockVsCodeApi.postMessage).toHaveBeenCalledWith({ type: 'hello', data: 'Empty' });
   });
 
-  it('sends message to VSCode when button is clicked', () => {
+  it('persists structured state via setState', () => {
     render(<App />);
-    const input = screen.getByPlaceholderText('Enter message...');
-    fireEvent.change(input, { target: { value: 'Hello World' } });
-
-    const sendButton = screen.getByRole('button', { name: /send message/i });
-    fireEvent.click(sendButton);
-
-    expect(mockVsCodeApi.postMessage).toHaveBeenCalledWith({
-      type: 'hello',
-      data: '💬: Hello World',
-    });
+    fireEvent.change(screen.getByPlaceholderText('Enter state...'), { target: { value: 'saved' } });
+    fireEvent.click(screen.getByRole('button', { name: /save state/i }));
+    expect(mockVsCodeApi.setState).toHaveBeenCalledWith({ state: 'saved' });
   });
 
-  it('sends empty message placeholder when message is empty', () => {
+  it('loads structured state via getState', () => {
+    mockVsCodeApi.getState.mockReturnValue({ state: 'loaded' } as never);
     render(<App />);
-    const sendButton = screen.getByRole('button', { name: /send message/i });
-    fireEvent.click(sendButton);
-
-    expect(mockVsCodeApi.postMessage).toHaveBeenCalledWith({
-      type: 'hello',
-      data: '💬: Empty',
-    });
-  });
-
-  it('updates state input value', () => {
-    render(<App />);
-    const input = screen.getByPlaceholderText('Enter state...');
-    fireEvent.change(input, { target: { value: 'my-state' } });
-    expect(input).toHaveValue('my-state');
-  });
-
-  it('saves state when Save State button is clicked', () => {
-    render(<App />);
-    const input = screen.getByPlaceholderText('Enter state...');
-    fireEvent.change(input, { target: { value: 'saved-state' } });
-
-    const saveButton = screen.getByRole('button', { name: /save state/i });
-    fireEvent.click(saveButton);
-
-    expect(mockVsCodeApi.setState).toHaveBeenCalledWith('saved-state');
-  });
-
-  it('loads state when Load State button is clicked', () => {
-    mockVsCodeApi.getState.mockReturnValue('loaded-state' as any);
-    render(<App />);
-
-    const loadButton = screen.getByRole('button', { name: /load state/i });
-    fireEvent.click(loadButton);
-
-    const input = screen.getByPlaceholderText('Enter state...');
-    expect(input).toHaveValue('loaded-state');
+    fireEvent.click(screen.getByRole('button', { name: /load state/i }));
+    expect(screen.getByPlaceholderText('Enter state...')).toHaveValue('loaded');
   });
 });
