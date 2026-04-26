@@ -45,16 +45,9 @@
     },
     "virtualWorkspaces": true
   },
-  "files": [
-    "dist",
-    "assets/icon.png",
-    "LICENSE",
-    "README.md",
-    "CHANGELOG.md"
-  ],
   "engines": {
     "node": ">=20",
-    "vscode": "^1.93.0"
+    "vscode": "^1.116.0"
   },
   "activationEvents": [],
   "contributes": {
