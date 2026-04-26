@@ -31,6 +31,11 @@ web_modules
 .stylelintcache
 *.tsbuildinfo
 
+# tsc composite-project emit byproducts (we use vite for actual build; tsc is type-only)
+extension/**/*.d.ts
+shared/**/*.d.ts
+*.config.d.ts
+
 # environment
 *.local
 
