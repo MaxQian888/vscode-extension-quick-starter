@@ -8,35 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial project setup with React 19 + shadcn/ui + Tailwind CSS v4
-- VSCode extension webview panel
-- Hot Module Replacement (HMR) support for development
-- Pre-configured shadcn/ui components (Button, Card, Input, Label, Badge, Separator, Textarea)
-- VSCode theme integration
-- ESLint configuration
-- TypeScript support
-- Vitest testing framework
-- GitHub Actions CI workflow
+- Typed extension/webview message contract (`shared/messages.ts`)
+- `OutputChannel` logger
+- CSP + nonce in webview HTML; `localResourceRoots` constrained to `dist/`
+- `ErrorBoundary` + global error capture in webview
+- `useVscodeApi` and `useVscodeMessage` hooks
+- `webview/ready` handshake gating first server→client message
+- Coverage thresholds for hooks/lib/ErrorBoundary
+- Playwright `dev` + `prod-preview` projects
+- Node 20+22 test matrix; 3-OS build matrix in CI
+- Weekly grouped Dependabot
+- Marketplace metadata (categories, keywords, icon, galleryBanner, extensionKind, capabilities)
+- `scripts/init-template.mjs` for one-shot template adoption
+- `SECURITY.md`, `.github/CODEOWNERS`, `docs/{architecture,publishing,adding-commands}.md`
+- changesets-driven release workflow
 
 ### Changed
-- N/A
-
-### Deprecated
-- N/A
+- shadcn component set trimmed to 16 commonly-used components
+- pre-commit hook is fast (`lint-staged`); pre-push runs `typecheck && test`
+- `release.yml` skips Marketplace step gracefully when `VSCE_PAT` is unset
 
 ### Removed
-- N/A
-
-### Fixed
-- N/A
-
-### Security
-- N/A
-
-## [0.0.1] - 2024-01-01
-
-### Added
-- Initial release
-- Basic webview panel with React
-- Message passing between extension and webview
-- State persistence support
+- 34 unused shadcn components and their heavy deps (`recharts`, `embla-carousel-react`, `vaul`, `react-day-picker`, `cmdk`, `input-otp`, `next-themes`, `react-hook-form`, `@hookform/resolvers`, `@base-ui/react`, `zod`, `react-resizable-panels`, `date-fns`)
+- `tsconfig.node.tsbuildinfo` from version control
+- Tautology asserts in extension-host tests

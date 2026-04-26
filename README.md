@@ -2,158 +2,112 @@
 
 [![CI](https://github.com/AstroAir/vscode-extension-quick-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/AstroAir/vscode-extension-quick-starter/actions/workflows/ci.yml)
 
-A modern VSCode extension starter template with **React + shadcn/ui + Tailwind CSS**.
+A minimal, opinionated VSCode extension starter built around **React 19 + shadcn/ui + Tailwind CSS v4**, with a typed extension/webview message contract, CSP-secured webviews, and a real testing pyramid out of the box.
 
-## Features
+## Highlights
 
-- **Vite** - Lightning fast HMR for development
-- **React 19** - Latest React with hooks
-- **shadcn/ui** - Beautiful, accessible components
-- **Tailwind CSS v4** - Utility-first CSS framework
-- **TypeScript** - Full type safety
-- **ESLint** - Code quality and consistency
-- **Hot Module Replacement** - Instant feedback during development
-- **Vitest** - Fast unit testing with React Testing Library
-- **Extension Tests** - VSCode extension integration tests
-- **GitHub Actions** - CI/CD workflows for testing and releases
+- **Vite 7** unified build for both extension and webview (`@tomjs/vite-plugin-vscode`)
+- **Typed message contract** in `shared/messages.ts` — both sides speak the same union
+- **CSP + nonce** in production webviews; permissive dev profile for HMR
+- **OutputChannel logger**; no stray `console.log` in extension code
+- **Three test layers**: Vitest (unit) + `@vscode/test-electron` (extension host) + Playwright (dev + prod-preview)
+- **Strict CI**: minimum permissions, Node 20+22 matrix, 3-OS build matrix, weekly Dependabot
+- **changesets** drives release; `vsce publish` is a no-op until `VSCE_PAT` is wired
 
-## Project Structure
-
-```text
-├── extension/              # VSCode extension code
-│   ├── index.ts            # Extension entry point
-│   └── views/              # Webview panel logic
-├── webview/                # React frontend
-│   ├── App.tsx             # Main React component
-│   ├── components/ui/      # shadcn/ui components
-│   ├── lib/utils.ts        # Utility functions
-│   ├── __tests__/          # React component tests
-│   └── index.css           # Tailwind CSS styles
-├── __tests__/              # Extension integration tests
-│   └── extension/          # VSCode extension tests
-├── .github/                # GitHub workflows & templates
-│   ├── workflows/          # CI/CD workflows
-│   └── ISSUE_TEMPLATE/     # Issue templates
-├── .vscode/                # VSCode settings & launch config
-├── index.html              # HTML entry point
-├── vite.config.ts          # Vite configuration
-├── vitest.config.ts        # Vitest test configuration
-└── package.json            # Project configuration
-```
-
-## Getting Started
+## Getting started
 
 ### Prerequisites
 
-- Node.js >= 18
-- pnpm (recommended) or npm
+- Node.js >= 20
+- pnpm
 
-### Installation
+### Clone via degit
 
 ```bash
-# Install dependencies
+npx degit AstroAir/vscode-extension-quick-starter my-ext
+cd my-ext
 pnpm install
-
-# Start development server
-pnpm dev
+pnpm init:template
 ```
 
-### Development
+`init:template` interactively replaces every hard-coded `your-publisher` / `AstroAir` / `vscode-extension-quick-starter` value across `package.json`, README, CHANGELOG, GitHub templates, and the extension test. Run with `--dry-run` first to see exactly what will change.
 
-1. Press `F5` to open a new VSCode window with the extension loaded
-2. Run the command `Hello World: Show` from the Command Palette (`Ctrl+Shift+P`)
-3. The webview will open with hot reload enabled
+### Run
+
+```bash
+pnpm dev      # Vite dev server with HMR
+```
+
+Press **F5** in VSCode to launch the Extension Development Host. Run **Hello World: Show** from the Command Palette.
 
 ### Build
 
 ```bash
-# Build for production
-pnpm build
+pnpm build    # production build
+pnpm package  # produce a .vsix
 ```
 
-## Adding shadcn/ui Components
+## Project structure
+
+```
+extension/        Node-side code: commands, views, logger
+  commands/       One file per command
+  views/          Panel + helper (CSP) + message router
+  logger.ts       OutputChannel singleton
+  index.ts        activate/deactivate
+shared/           Single source of truth for the message contract
+webview/          React app rendered inside the webview panel
+  components/     shadcn UI + ErrorBoundary
+  hooks/          useVscodeApi, useVscodeMessage
+  utils/          Legacy vscode util (delegates to hook)
+__tests__/        Extension-host integration tests (Mocha)
+e2e/              Playwright (dev + prod-preview)
+docs/             Architecture, publishing, adding-commands
+scripts/          init-template.mjs
+.github/          Workflows, Dependabot, CODEOWNERS, issue/PR templates
+assets/           Marketplace icon (replace before publishing)
+```
+
+## Available shadcn components
+
+`alert`, `badge`, `button`, `card`, `dialog`, `dropdown-menu`, `input`, `label`, `select`, `separator`, `skeleton`, `sonner`, `switch`, `tabs`, `textarea`, `tooltip`. Add more on demand:
 
 ```bash
-# Add a new component
-pnpm dlx shadcn@latest add [component-name]
-
-# Example: Add dialog component
-pnpm dlx shadcn@latest add dialog
+pnpm dlx shadcn@latest add <component>
 ```
 
-## Available Components
+## Architecture
 
-Pre-installed shadcn/ui components:
+See [docs/architecture.md](docs/architecture.md) for module diagrams, message timing, and CSP enforcement details.
 
-- Button
-- Card
-- Input
-- Label
-- Badge
-- Separator
-- Textarea
+## Adding a new command
 
-## Testing
+See [docs/adding-commands.md](docs/adding-commands.md).
 
-This template includes comprehensive testing support:
+## Publishing to the Marketplace
 
-### Unit Tests (Vitest + Testing Library)
-
-```bash
-# Run all unit tests
-pnpm test
-
-# Run tests in watch mode
-pnpm test:watch
-
-# Run tests with coverage report
-pnpm test:coverage
-```
-
-### Extension Integration Tests
-
-```bash
-# Run VSCode extension tests
-pnpm test:extension
-```
-
-### E2E Tests (Playwright)
-
-```bash
-# Run E2E tests
-pnpm test:e2e
-
-# Run E2E tests with UI mode
-pnpm test:e2e:ui
-
-# View test report
-pnpm test:e2e:report
-```
+See [docs/publishing.md](docs/publishing.md). Note: `package.json` ships with `private: true` as a safety brake — flip it before your first `vsce publish`.
 
 ## Scripts
 
-| Command                | Description                       |
-| ---------------------- | --------------------------------- |
-| `pnpm dev`             | Start development server with HMR |
-| `pnpm build`           | Build for production              |
-| `pnpm lint`            | Run ESLint                        |
-| `pnpm test`            | Run unit tests                    |
-| `pnpm test:watch`      | Run tests in watch mode           |
-| `pnpm test:coverage`   | Run tests with coverage           |
-| `pnpm test:extension`  | Run extension integration tests   |
-| `pnpm test:e2e`        | Run E2E tests with Playwright     |
-| `pnpm test:e2e:ui`     | Run E2E tests with UI mode        |
-| `pnpm test:e2e:report` | View test report                  |
-| `pnpm package`         | Package extension as .vsix        |
-| `pnpm publish`         | Publish extension to marketplace  |
+| Command | Description |
+|---|---|
+| `pnpm dev` | Vite dev server with HMR |
+| `pnpm build` | Production build |
+| `pnpm typecheck` | `tsc --noEmit` for both projects |
+| `pnpm lint` | ESLint (`@antfu` + `@tomjs` presets) |
+| `pnpm test` | Vitest unit suite |
+| `pnpm test:coverage` | Vitest with v8 coverage |
+| `pnpm test:extension` | Extension-host integration tests |
+| `pnpm test:e2e` | Playwright (dev + prod-preview projects) |
+| `pnpm test:all` | All three test layers |
+| `pnpm package` | Produce `.vsix` |
+| `pnpm changeset` | Add a changeset entry for the next release |
+| `pnpm init:template` | One-shot template adoption (run once after cloning) |
 
-## VSCode Theme Integration
+## Testing
 
-The template uses VSCode theme variables for seamless integration:
-
-- Background colors match editor theme
-- Text colors adapt to light/dark mode
-- Focus states use VSCode accent colors
+Unit tests live next to source under `webview/__tests__/`. Extension-host tests are in `__tests__/extension/suite/` and run inside an instance of VSCode launched by `@vscode/test-electron`. End-to-end tests in `e2e/` use Playwright with two projects: `dev` (against `pnpm dev`) and `prod-preview` (against `vite preview` of the built dist), so the production bundle's CSP and asset paths are exercised on every PR.
 
 ## License
 

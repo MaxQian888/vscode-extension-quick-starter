@@ -6,8 +6,8 @@ Thank you for your interest in contributing to VSCode Extension Quick Starter!
 
 ### Prerequisites
 
-- Node.js >= 18
-- pnpm >= 8
+- Node.js >= 20
+- pnpm >= 9
 
 ### Getting Started
 
@@ -109,6 +109,8 @@ docs: update README with testing instructions
 - Follow the existing code style (enforced by ESLint)
 - Write meaningful commit messages
 - Add tests for new features
+- When adding a new extension↔webview message, edit `shared/messages.ts` first; both sides will surface red until you wire the handlers
+- Pre-commit runs `lint-staged` only. Pre-push runs `typecheck && test` — if it fails, fix the underlying issue rather than bypassing with `--no-verify`
 
 ## Adding shadcn/ui Components
 
