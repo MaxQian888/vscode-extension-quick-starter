@@ -128,7 +128,7 @@
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.9.1",
     "eslint": "^9.39.4",
-    "glob": "^11.1.0",
+    "glob": "^13.0.6",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.4.0",
     "mocha": "^11.7.5",
