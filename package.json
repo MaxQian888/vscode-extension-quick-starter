@@ -129,7 +129,7 @@
     "@vscode/vsce": "^3.9.1",
     "eslint": "^9.39.4",
     "glob": "^13.0.6",
-    "jsdom": "^26.1.0",
+    "jsdom": "^29.1.1",
     "lint-staged": "^16.4.0",
     "mocha": "^11.7.5",
     "playwright": "^1.59.1",
